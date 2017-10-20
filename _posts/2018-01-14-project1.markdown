@@ -1,0 +1,533 @@
+---
+layout: post
+title:  "Project 1 - Guess the secret number"
+date:   2018-01-14 07:57:00 -0500
+---
+
+# Pre-requisite: Java
+
+For this tutorial to work on your computer, you will need to have Java installed.
+
+You can verify this with the command line of your computer. Open a terminal (by executing `cmd` if you're on Windows or opening the Terminal app on Mac) and type `java -version`, you should see something like this:
+
+```console
+$ java -version
+java version "1.8.0_40"
+Java(TM) SE Runtime Environment (build 1.8.0_40-b27)
+Java HotSpot(TM) 64-Bit Server VM (build 25.40-b25, mixed mode)
+```
+
+If you're getting an error message instead, go to [https://www.java.com][java] and follow the instructions to install Java.
+
+# Discovering Nightcode
+
+For this tutorial, we will use Nightcode, a simple but powerful editor for a programming language called Clojure. Let's get started!
+
+First, go to the web site [https://sekao.net/nightcode/][nightcode] in order to download Nightcode. Click on the version that corresponds to your type of computer in order to download it. After the download is finished, double click on the file name and follow the instructions in order to install Nightcode. 
+
+Once installed, launch Nightcode and it should look something like that:
+
+![Nightcode]({{ "/assets/nightcode.png" | absolute_url }})
+
+This editor is your new tool box and you will learn how to use it as we move along these tutorials.
+
+Let's start with the bottom section, where you can see `Starting REPL`, REPL stands for Read Eval Print Loop, this is the barbarian way for a computer program to say "talk to me". Let's try:
+
+```console
+user=> hello
+CompilerException java.lang.RuntimeException: Unable to resolve symbol: hello in this context, compiling:(NO_SOURCE_PATH:0:0) 
+```
+
+Well, this program is really a barbarian, you're going to have to learn and speak the same language. In the example above, the key part of its message is `Unable to resolve symbol: hello`, we need to write something that the program understands and `hello` is not part of it.
+
+Computers are good with numbers, how about trying some numbers and see what the program thinks:
+
+```clojure
+user=> 1
+1
+user=> 43
+43
+user=> 123
+123
+```
+
+This program just repeated the numbers that you typed, not very useful but at least that means it understands numbers. Do you want to try and add numbers together? You might be tempted to do something like that:
+
+```console
+user=> 2 + 2
+2
+#object[Clojure.core$_PLUS_ 0x2ceb80a1 "Clojure.core$_PLUS_@2ceb80a1"]
+2
+```
+
+Not really what we expected. Now is a good time to start using the top section of Nightcode. Do you see where it says  `Type to search...`? Let's type `+` in there and see what happens. Do you see how the symbol `+` gets highlighted in the `Arithmetic` section? 
+
+![Plus]({{ "/assets/plus.png" | absolute_url }})
+
+Click on it. A page opens that explains how to use `+` in Clojure and it evens shows some examples. Let's try some of those in the REPL below.
+
+```clojure
+user=> (+ 1 2)
+3
+user=> (+ 1 2 3)
+6
+```
+
+So that was it, these parentheses are the sesame that allows you to make the program do something. And, as you probably noticed too, the first element after the opening parenthesis is the action that you want the program to perform, we call it a function. The elements after the function names are called the arguments or parameters.
+
+In order to return to the main page, notice the button that shows `<` in the top menu.
+![Back]({{ "/assets/back-button.png" | absolute_url }})
+
+# Finding useful functions
+
+We will build a simple game where the computer generates a random number that the player needs to guess.
+ 
+You may have noticed that the documentation for the `+` function was in the section `Primitives` and sub-section `Numbers`, this sounds like an interesting place to explore and look for a way to generate a random number. There's actually a row named `Random` in this documentation, do you see it? Can you see the 2 functions that it contains? How about trying them in the REPL? Just don't forget the parentheses.
+
+Here is a quick tip to make your life easier in the REPL, pressing the up arrow `↑` on your keyboard brings back the last expression you entered. If you press it multiple times, you can go back in your history. Try it. 
+
+If you played with the random number functions, your REPL session could look like this:
+
+```clojure
+user=> (rand)
+0.9003804302146364
+user=> (rand)
+0.2927149527392424
+user=> (rand-int 5)
+4
+user=> (rand-int 5)
+3
+```
+ 
+These functions definitely produce a different number each time, exactly what we want. The decimal number produced by the function `rand` is pretty hard for a player to guess, so `rand-int` seems like a better option. Question: what is the smallest number that `(rand-int 5)` can generate? What is the biggest? If you missed it in the documentation, you can try running this function many times and figure it out. What changes if you run `(rand-int 10)` instead?
+
+Did you realize that you can play a game already? Just try to guess the number that the program will produce before you execute the function. We're still far from having the complete game but that doesn't mean we can't have some fun while programming.
+
+# Naming things
+
+Now it would be useful to have the program remember the number that it generated, so that the player can try to guess multiple times. Let's meet the `def` special form in order to help us out with this. A special form is technically not a function but it still looks like one. The `def` special form allows the program to remember a value by giving it a name. Let's try.
+
+```clojure
+user=> (def my-number 7)
+#'user/my-number
+user=> my-number
+7
+```
+
+Pretty simple. Now we just need to put things together, the number we want the program to remember is the random number generated by `rand-int`. Well, we just need to compose the 2 things that we just learned. We'll use `def` to give a name, and `rand-int` to generate the value to associate with this name. You can try to do it yourself or read the example below to see how it's done. 
+
+```clojure
+user=> (def secret (rand-int 10))
+#'user/secret
+user=> secret
+2
+user=> secret
+2
+```
+
+Notice how executing `secret` always returns the same value after it has been set? It's also worth noticing that `secret` is a symbol that you created and not part of the language. 
+
+Remember this error `Unable to resolve symbol: hello` that we encountered at the very beginning? Now you know how to create this symbol `hello` and give it a value if you want to, just like we did with `secret` above. 
+
+You may want to associate words to the symbol hello, rather than a number like we did so far. Let me introduce you to strings, these are a type of values that contain words, all you have to do is write these words between double quotes `"`. See below how to create a symbol `hello` that contains the value `"hello"`.
+
+```clojure
+user=> hello
+CompilerException java.lang.RuntimeException: Unable to resolve symbol: hello in this context, compiling:(NO_SOURCE_PATH:0:0) 
+user=> "hello"
+"hello"
+user=> (def hello "hello")
+#'user/hello
+user=> hello
+"hello"
+```
+
+# Writing your first function
+
+Can you find how to compare numbers in the documentation?
+
+In the compare section, you should be able to find the functions that will allow you to compare your secret number with the guess from a player.
+
+```clojure
+user=> (= secret 5)
+false
+user=> (< secret 5)
+true
+user=> (= secret 2)
+true
+```
+
+See these `true` and `false` in the results? After numbers and strings, this is the third type of primitive that you encounter, it's called `boolean` and can only be one of these 2 values. Booleans are very useful to test conditions, for instance with the special form `if`.
+
+Let's see how this work with an example. We want to write a piece of code that returns "You won!" when a given number is equal to the secret. As usual, you can try by yourself with help from the documentation about the `if` special form, or you can read along and see how it can done.
+
+```clojure
+user=> (if (= secret 2) "You won!")
+"You won!"
+user=> (if (= secret 3) "You won!")
+nil
+user=> (if (= secret 3) "You won!" "You lost!")
+"You lost!"
+```
+
+Instead of repeating the entire expression every time, it would be very useful to be able to give it a name and call it with only the number that changes. We will do that by writing our very first function.
+
+We know about `def` that allows to give something a name. There is also the function `fn` that allows to create a function. It is possible to create a function by composing these two, however Clojure provides a shortcut called `defn`. This will take a bit of explaining, so let's start by looking at the code:
+
+```clojure
+user=> (defn check-guess [guess] (if (= secret guess) "You won!" "You lost!"))
+#'user/check-guess
+user=> (check-guess 3)
+"You lost!"
+user=> (check-guess 2)
+"You won!"
+```
+
+`defn` takes a name, in this case we used `check-guess` followed by some parameters and their names between brackets `[]`. In the example above, there is only one parameter that we called `guess`. Finally, the last part is the body of the function, where we just reused the `if` expression that we saw earlier, replacing only the hard-coded number with the parameter `guess`.
+
+# Creating a project
+
+The REPL is useful to try things out and interact with your program, but it quickly becomes too limited to be able to build an entire program made of multiple functions. It is time to start structuring our code a little bit more, within a project. 
+
+At the top left of Nightcode menu, you can see the button `Start`, click on it and choose `Console Project`. The other choices in this menu may sound a lot more exciting, and they are, but don't worry, we'll get to them eventually.
+
+Nightcode will ask you for a name for your project, and where to save it on your computer. Our first project will be this little game to find a secret number, you can give it the name you want but you can't use spaces or special characters. By convention, write all the words in lower case and use dashes as separators. An example to name this project could be `find-the-number`.
+
+Once created, your project should look like this in Nightcode:
+
+![New Project]({{ "/assets/new-project.png" | absolute_url }})
+
+There is also a corresponding directory on your computer, containing your project. This default console project contains only 3 files, you can click on them to explore their content.
+
+* `project.clj` is a descriptor, containing the name, version and description of your project and exists to tell the computer how to build it or run it. You don't have to understand this file completely at this stage, just know that it's there.
+* `README.md` is meant to show some documentation about your project. You won't need to worry about it, until some day you start publishing your work online for other people to use.
+* Finally, click the triangle in front of `src` to explore its content. There is a directory with the same name than your project, also click on the triangle in front of it.  You will find a file `core.clj` which contains the code for your project. This is where we're going to work. For now, it should look like this:
+
+```clojure
+(ns find-the-number.core
+  (:gen-class))
+
+(defn -main []
+  (println "Hello, World!"))
+```
+
+The `ns` form at the top of the file stands for namespace. This repeats the name of the project and the file name and it exists only to keep functions organized. Since this project will be very small, we won't need any other namespace so you don't need to worry about namespaces for now. 
+
+You may also be wondering about the `:gen-class` piece, this is actually optional and has been added to make the program start faster. Explaining why would go way beyond the scope of this introductory lesson, you can just know that this has to do with the Java Virtual Machine (JVM) which is a piece of software installed on most computers and designed initially to run programs written in Java (another programming language). The JVM has been so good at running programs that many computer scientists or engineers invented other programming languages that could be executed on this virtual machine. This is what Rich Hickey did when he invented Clojure in 2007.
+
+The `-main` function is the entry point to the project, this is a convention in Clojure that the function called `-main` is the one being called when a program is executed.
+
+# Running a project
+
+See the buttons at the bottom of the screen? Try clicking `Run` and see what happens. You might not be surprised to see the program printing out "Hello, World!" in the console before exiting, this what the function `println` does. If you want, you can confirm this by clicking `Home` at the top of the left panel and go back to the documentation for `println`.
+
+Another interesting button is `Run with REPL`, try it. You'll see a REPL appear, similar to the one we were working with before, with one major difference. Instead of prompting with `user=>`, this one shows your project main namespace, something like `find-the-number.core=>`. This is a magical property of Clojure, you're connected right into the core of your program and can run it or modify it from this REPL. Running the `-main` function is as simple as:
+
+```clojure
+find-the-number.core=> (-main)
+Hello, World!
+nil
+```
+
+Now change the greeting string of the program to say something else, for example "Hello, Master!" and click on the button `Reload File`. If you run the `-main` function again, you'll see that the updated program ran:
+
+```clojure
+find-the-number.core=> (-main)
+Hello, Master!
+nil
+```
+
+You may be wondering what `nil` means in the output above. This is a special value that means nothing in Clojure and this is displayed because that's what the `-main` function returns. The reason that `-main` returns `nil` is because `-main` returns what `-println` returns and this core function of Clojure always returns `nil`.
+
+You can change that by making `-main` do something else after `println`, for example this:
+
+```clojure
+(defn -main []
+  (println "Hello, Master!")
+  (+ 2 3))
+```
+
+Click `Reload File` and call `-main` again from the REPL. You'll now see a 5 instead of nil, as expected.
+
+# Writing your program
+
+You now have a project where you can save and edit your code. Let's bring in the `check-guess` function that we worked on earlier and call it from the `-main` function. 
+
+One important thing to know, is that the order of functions matter in Clojure. In order to call a function, it needs to be have been defined before it's called. This could be particularly error prone when working with the REPL, because you could end up in a situation where the program runs fine in your REPL session but fails to start again after that. For example, if you're program looks like this:
+
+```clojure
+(ns find-the-number.core
+  (:gen-class))
+
+(defn -main []
+  (println "Hello, World!"))
+
+(defn generate-number []
+  (rand-int 10))
+```
+
+This program is just fine, and you can reload this file and call the `generate-number` function from the REPL.
+
+The problem occurs if you decide after this to modify the program to call the `generate-number` function from the main one, like this:
+
+```clojure
+(ns find-the-number.core
+  (:gen-class))
+
+(defn -main []
+  (generate-number))
+
+(defn generate-number []
+  (rand-int 10))
+```
+
+This program is invalid because `generate-number` is called before it's defined. However, if you went through the previous step, the function `generate-number` has already been loaded into your program, so clicking `Reload File` will work just fine and give you the illusion that your program is correct. Things will start failing only after you click `Stop` and `Run` or `Run with REPL` again. You will get a long error message with the following root cause at the bottom:
+
+```clojure
+Caused by: java.lang.RuntimeException: Unable to resolve symbol: generate-number in this context
+```
+
+Just be aware of this as you write your program as this is a common pitfall for Clojure beginners.
+
+Knowing this, try adding your `secret` number and `check-guess` function to this program, and make the `-main` function verify if the secret number is 7, just because 7 is a lucky number.
+
+This is definitely a good exercise to try by yourself, but if you're getting stuck, here is the answer:
+
+```clojure
+(ns find-the-number.core
+  (:gen-class))
+
+(def secret (rand-int 10))
+
+(defn check-guess [guess] 
+  (if (= secret guess)
+    (println "Congrats, you won!")
+    (println "Sorry, you lost!")))
+
+(defn -main []
+  (check-guess 7))
+```
+
+Why did we use `println`? Because if you just return the strings, they won't be displayed when running the program without the REPL. The returned values are useful for the program to make decisions and are also printed out to the programmer in a REPL session, but they're not meant to communicate with the human being who uses the program. For that, we need to use a function whose purpose is to display a message and this is what `println` does.
+
+
+# Making it interactive
+
+With the program above, you can call `check-guess` from the REPL to search for the secret number, but obviously the main function is a little useless. Keep in mind that the players of our game will not have access to a REPL in order to play the game, the REPL is just a tool for you, the developer of the game.
+
+The function that will allow to make your program interactive is `read-line`. It pauses the program and waits for an input for the user of the program. When working with the REPL, it will look a bit awkward, pausing the program on the same line, waiting for you to enter some value. Try it directly in the REPL, it will look like this:
+
+```clojure
+find-the-number.core=> (read-line)2
+"2"
+find-the-number.core=> (read-line)5
+"5"
+```
+
+There is one problem that we need to solve, do you see how the value you entered is returned between quotes? `2` becomes `"2"` which is a string instead of a number as we discussed before. And a string is never equal to a number.
+
+```clojure
+find-the-number.core=> (= 2 "2")
+false
+```
+
+For our input to be useful, we need to convert it into a number. There are different ways to do this but Clojure doesn't offer a function that is really designed to do this, so we will fall back to a Java method. Remember how Clojure runs on the JVM? This means it can call some Java code too. You can go very far with Clojure without knowing much about the lower level Java code, but there are a few cases like this one where Java can come in handy. Java methods behave just like Clojure functions, except they're organized in classes. For instance, the function we need is `parseInt` which lives in the `Integer` class, so the way to call it is `Integer/parseInt`. Let's try it out.
+
+```clojure
+user=> (Integer/parseInt "2")
+2
+find-the-number.core=> (Integer/parseInt (read-line))4
+4
+```
+
+With that knowledge in mind. Can you update the function `check-guess` in your program to ask the player to enter a number and check if it's correct.
+
+Did you do it?
+
+For real?
+
+If not, stop reading and go to Nightcode now!
+
+The answer is below but you need to try by yourself first.
+
+All right, here we go, this is what it could look like:
+
+```clojure
+(ns find-the-number.core
+  (:gen-class))
+
+(def secret (rand-int 10))
+
+(defn check-guess [] 
+  (println "Please enter a number: ")
+  (if (= secret (Integer/parseInt (read-line)))
+    (println "Congrats, you won!")
+    (println "Sorry, you lost!")))
+
+(defn -main []
+  (check-guess))
+```
+
+Wouldn't it be nice to change this "Sorry, you lost!" into "Sorry, try again.". How can we allow the player to try again though? Very simply, we can call the function `check-guess` again, from itself. When a function calls itself, this is called recursion. But how can we make the program do 2 things (displaying the message and making the recursive call)? For that, we wrap the 2 expressions with the `do` special form. Here is our improved program:
+
+```clojure
+(ns find-the-number.core
+  (:gen-class))
+
+(def secret (rand-int 10))
+
+(defn check-guess [] 
+  (println "Please enter a number: ")
+  (if (= secret (Integer/parseInt (read-line)))
+    (println "Congrats, you won!")
+    (do 
+      (println "Sorry, try again.")
+      (check-guess))))
+
+(defn -main []
+  (check-guess))
+```
+
+As you improve the program, make sure your press the `Reload File` button and try your `check-guess` function from the REPL. The only way to know if your code is correct is to run it.
+
+# Remembering intermediate results
+
+A further improvement to our program would be to give a better indication to the player if their guess is higher or lower than the secret number.
+
+You almost know everything needed to do that, but one more special form will come in very handy, this is `let` which allows to remember an intermediate result and give it a name, a bit like `def` but inside a function.
+
+Let's try it in the REPL first. Follow with us here:
+
+```clojure
+find-the-number.core=> (def guess 2)
+#'find-the-number.core/guess
+find-the-number.core=> (- secret guess)
+2
+find-the-number.core=> (let [diff (- secret guess)] (println "The difference between secret and guess is" diff))
+The difference between secret and guess is 2
+nil
+```
+
+What happened here? First, we defined a value `guess` just to play with it without asking the player every time. Then, we use the `-` function to check how far the guess is from the secret number. Notice how we can access the value of `secret` in the REPL because we're connected with the program.
+
+Finally, we used `let` to remember the difference between secret and guess and "remember" it with the name `diff`. It may look a bit complicated but it's really not. Do you remember how we used similar square brackets to give names to the arguments of a function? The idea is the same here, except that immediately after the name, we provide an expression that will compute the value to assign to this name.
+
+It is also possible to remember more than 1 value with `let`. For example, instead of using `def` for the `guess` value above, we could have added it within `let` like this:
+
+```clojure
+find-the-number.core=> (let [guess 2 diff (- secret guess)] (println "The difference between secret and guess is " diff))
+The difference between secret and guess is  2
+nil
+```
+
+This looks a bit messy and hard to read when it's all on the same line, so when you use let in a program, it's good to spread the code over multiple lines, like this:
+
+```clojure
+(let [guess 2 
+      diff (- secret guess)] 
+  (println "The difference between secret and guess is " diff))
+```
+
+Here is another tip, if you want to try some code in the REPL, but it's a bit long and tedious to type in the REPL itself, type it in your program `core.clj` instead, then select it with your mouse or your keyboard by putting the cursor just before the code you want to select, hold the Shift key down and press the down arrow key for as many lines as you need to select. Once the code you want to try is completely selected, click the `Reload Selection` button. It will send this bit of code into the REPL and print out the result.
+
+Here is your next assignment, use `let` in the `check-number` function to remember the difference between guess and secret and display different messages when the player has guessed higher or lower than the secret number.
+
+You will need the `<` and `>` function to compare the numbers.
+
+But other than that you already know everything you need, so give it a try.
+
+Are you done?
+
+Okay, here is what it could look like:
+
+```clojure
+(ns find-the-number.core
+  (:gen-class))
+
+(def secret (rand-int 10))
+
+(defn check-guess [] 
+  (println "Please enter a number: ")
+  (let [guess (Integer/parseInt (read-line))
+        diff (- secret guess)]
+    (cond 
+      (= 0 diff) (println "Congrats, you won!")
+      (> 0 diff) (do (println "This is too high.") (check-guess))
+      (< 0 diff) (do (println "This is too low.") (check-guess)))))      
+
+(defn -main []
+  (check-guess))
+```
+
+# Making the program configurable
+
+We're almost there, our game is starting to look pretty good. There is one slightly annoying detail though. If we want the secret number to between 0 and 100, we need to modify the program. It would be really cool to be able to play different variations of the game with different upper boundary for the secret number.
+
+For this we can leverage the way a Clojure program can take arguments, in the `-main` function itself. Arguments received from the command lines are always strings, so we'll need to add an argument that we can call `max-number`, convert it to a number and use it for generating the secret number.
+
+You should be able to do all this by yourself, and try it out by calling `(-main "100")` from the REPL. Are you ready for this challenge?
+
+You really do know already everything you need for this to work, so get to work.
+
+Here is the solution for when you're done.
+
+```clojure
+(ns find-the-number.core
+  (:gen-class))
+
+(defn check-guess [secret] 
+  (println "Please enter a number: ")
+  (let [guess (Integer/parseInt (read-line))
+        diff (- secret guess)]
+    (cond 
+      (= 0 diff) (println "Congrats, you won!")
+      (> 0 diff) (do (println "This is too high.") (check-guess secret))
+      (< 0 diff) (do (println "This is too low.") (check-guess secret)))))      
+
+(defn -main [max-number]
+  (let [secret (rand-int (Integer/parseInt max-number))]
+    (check-guess secret)))
+```
+
+It should all work fine from the REPL, but if you try the `Run` button, you will notice that Nightcode fails to run this program now, because it doesn't have a way to pass it a parameter.
+
+# Building and running the game
+
+This is now the final step of this lesson, we will see how to package your program in a way that can be executed outside of Nightcode.
+
+Click the `Build` button, the output should look something like this:
+
+```clojure
+Building...
+Compiling find-the-number.core
+Compiling find-the-number.core
+Created /Users/admin/find-the-number/target/find-the-number-0.0.1-SNAPSHOT.jar
+Created /Users/admin/find-the-number/target/find-the-number-0.0.1-SNAPSHOT-standalone.jar
+```
+
+The 2 lines at the end show the files created that contain your program in an executable format. The first one contains only your code and would require Clojure as an additional dependency in order to run. The second one, with suffix `-standalone`, contains everything needed to execute. The `jar` extension of these files stand for Java ARchive.
+
+If you're on Windows, the path of the files will look different but the concept is the same. It gives you the location on your machine where you can find your program.
+
+In order to run your program, open a terminal, use the command `cd` to go to the directory that contains your files as provided above, and you can run the standalone version of the program by using the command `java -jar` followed by the name of the program and the value you want to use for max-number, for instance:
+
+```console
+$ cd /Users/admin/find-the-number/target
+$ java -jar find-the-number-0.0.1-SNAPSHOT-standalone.jar 100
+Please enter a number:
+```
+
+And this is it, you've programmed a game! You can play it using different arguments to make it more or less difficult. Can you figure out the best technique to win this game in as little steps as possible? There's actually a technique called `binary search` that is well known from programmers and that can allow you to find the secret number in very few steps, no matter how big the range of numbers is. Try to figure it out, and feel free to look it up on the internet.
+
+# Bonus exercises
+
+If you want to go further with this program, here are a couple of things you can try.
+
+* Change the prompt to ask for "Please enter a number between 0 and X", replacing X with the maximum value of the secret number. Hints: a function that you create can take multiple arguments, the function `println` as well.
+* Change the clue to say "This is way too high" when the guess is a lot higher than the secret number and "This is way too low" when the guess is a lot lower than the secret number. You can start with an arbitrary hard-coded number, for instance 25 lower or higher which will work well when max-number is 100. Then you can refine by using for example a quarter of max-number.
+
+Have fun!
+
+
+[java]: https://www.java.com
+[nightcode]: https://sekao.net/nightcode/

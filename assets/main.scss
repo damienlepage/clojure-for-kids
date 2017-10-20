@@ -1,0 +1,91 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+pre, code {
+  white-space: pre-wrap; /* css-3 */
+  white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
+  background: #336;
+}
+
+body {
+  color: #bbb;
+  background-color: #012;
+}
+
+.post-meta {
+    color: #bbb;
+}
+
+.site-title, .site-title:visited {
+    color: #bbb;
+}
+
+.site-nav .page-link {
+    color: #bbb;
+}
+
+a, a:visited, a:hover {
+    color: #ea0;
+}
+
+.highlighter-rouge .highlight {
+    background: #336;
+}
+
+.highlight .nt {
+    color: #bbb;
+}
+
+.highlight .gp {
+    color: #bbb;
+}
+
+.highlight .go {
+    color: #bbb;
+}
+
+.highlight .nb {
+    color: #4cc;
+}
+
+.highlight .nf {
+    color: #4cc;
+}
+
+.highlight .no {
+    color: #4cc;
+}
+
+.highlight .mi {
+    color: #ea0;
+}
+
+.highlight .mf {
+    color: #ea0;
+}
+
+.highlight .ss {
+    color: #e6e;
+}
+
+.highlight .s {
+    color: #da7;
+}
+
+.highlight .nv {
+    color: #bbb;
+}
+
+.highlight .s2 {
+    color: #bbb;
+}
+
+.highlight .err {
+    color: #bbb;
+    background-color: #336;
+}
