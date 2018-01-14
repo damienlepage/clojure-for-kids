@@ -17,8 +17,8 @@ title: Clojure for kids
 description: >- # this means to ignore newlines until "baseurl:"
   This site is meant to teach the Clojure programming language through a few fun projects. 
   It doesn't assume any particular knowledge but some children might need additional help from an adult.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/clojure-for-kids" # the subpath of your site, e.g. /blog
+url: "https://damienlepage.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: damienlepage
 github_username:  damienlepage
 
@@ -27,6 +27,9 @@ markdown: kramdown
 theme: minima
 plugins:
   - jekyll-feed
+
+disqus:
+  shortname: clojure-for-kids
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
