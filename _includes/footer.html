@@ -1,0 +1,21 @@
+<script>
+var solutions = document.getElementsByClassName('solution');
+for (var i = 0; i < solutions.length; i++) {
+  solutions[i].nextElementSibling.classList.add('collapsed');
+  solutions[i].addEventListener('click', function(e) {
+    var classes = e.target.classList;
+    var blockClasses = e.target.nextElementSibling.classList;
+    if (classes.contains('closed')) {
+      classes.remove('closed');
+      classes.add('open');
+      blockClasses.remove('collapsed');
+      blockClasses.add('expanded');
+    } else {
+      classes.remove('open');
+      classes.add('closed');
+      blockClasses.add('collapsed');
+      blockClasses.remove('expanded');
+    }
+  });
+}
+</script>

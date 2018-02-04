@@ -41,6 +41,30 @@ a, a:visited, a:hover {
     color: #ea0;
 }
 
+.solution {
+  background: #e8e8e8;
+  color: #012;
+
+  &.closed {
+    margin-bottom: 15px;
+    &:after {
+      content: " ► Click to show the solution";
+    }
+  }
+
+  &.open:after {
+    content: " ▼ Click again to hide the solution";
+  }
+}
+
+.collapsed {
+  display: none;
+}
+
+.expanded pre {
+  border-radius: 0 0 3px 3px;
+}
+
 /**
  * Syntax highlighting styles
  */
