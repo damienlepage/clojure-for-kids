@@ -48,12 +48,12 @@ a, a:visited, a:hover {
   &.closed {
     margin-bottom: 15px;
     &:after {
-      content: " ► Click to show the solution";
+      content: " ► Click to show a solution";
     }
   }
 
   &.open:after {
-    content: " ▼ Click again to hide the solution";
+    content: " ▼ Click again to hide this solution";
   }
 }
 
@@ -136,4 +136,3 @@ a, a:visited, a:hover {
   .vi    { color: #008080 } // Name.Variable.Instance
   .il    { color: #099 } // Literal.Number.Integer.Long
 }
-
